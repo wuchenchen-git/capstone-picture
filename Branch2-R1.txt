@@ -1,0 +1,235 @@
+!
+! Last configuration change at 16:47:20 UTC Mon Dec 8 2025 by admin
+!
+version 16.6
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+!
+hostname Branch2-R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+security passwords min-length 8
+enable secret 5 $1$TnoD$Vm4vFG5iXO6PrSVOELzHl.
+!
+no aaa new-model
+!
+no ip domain lookup
+ip domain name handsometao.win
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0/2
+ no watchdog
+!
+license udi pid ISR4321/K9 sn FDO211108DA
+license boot suite AdvUCSuiteK9
+license boot level securityk9
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+!
+!
+username admin secret 5 $1$kpMo$tqNisvZOyRr8Op7eg.QHT1
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+track 1 interface GigabitEthernet0/0/0 line-protocol
+!
+no cdp run
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0/0
+ ip address 10.0.1.2 255.255.255.252
+ ip ospf dead-interval 4
+ ip ospf hello-interval 2
+ ip ospf lls disable
+ negotiation auto
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ negotiation auto
+!
+interface GigabitEthernet0/0/1.10
+ encapsulation dot1Q 10
+ ip address 192.168.2.253 255.255.255.0
+ ip helper-address 192.168.200.101
+ ip helper-address 192.168.100.101
+ standby 2 ip 192.168.2.254
+ standby 2 priority 255
+ standby 2 preempt
+ standby 2 track 1 decrement 255
+!
+interface GigabitEthernet0/0/1.100
+ encapsulation dot1Q 100
+ ip address 192.168.200.253 255.255.255.0
+ standby 1 ip 192.168.200.254
+ standby 1 priority 255
+ standby 1 preempt
+ standby 1 track 1 decrement 255
+!
+interface Serial0/1/0
+ no ip address
+!
+interface Serial0/1/1
+ no ip address
+!
+interface Service-Engine0/2/0
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ negotiation auto
+!
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface GigabitEthernet0/0/1.10
+ passive-interface GigabitEthernet0/0/1.100
+ network 10.0.1.0 0.0.0.3 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+ network 192.168.200.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet0
+!
+ip ssh version 2
+!
+access-list 99 permit 192.168.200.0 0.0.0.255
+!
+!
+!
+!
+control-plane
+!
+!
+voice-port 0/2/0
+!
+voice-port 0/2/1
+!
+voice-port 0/2/2
+!
+voice-port 0/2/3
+!
+voice-port 0/2/4
+!
+voice-port 0/2/5
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+!
+!
+banner motd ^C
+************************************************************
+*  WARNING: AUTHORIZED ACCESS ONLY                         *
+*  ------------------------------------------------------  *
+*  This system is the property of Handsometao.Corp .       *
+*  Unauthorized access is prohibited.                      *
+*                                                          *
+*  All activities on this device are monitored and logged. *
+*  Disconnect immediately if you are not an authorized     *
+*  user.                                                   *
+************************************************************
+^C
+!
+line con 0
+ password 7 110A1016141D2B5D5679
+ login
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ access-class 99 in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class 99 in
+ login local
+ transport input ssh
+!
+wsma agent exec
+!
+wsma agent config
+!
+wsma agent filesys
+!
+wsma agent notify
+!
+!
+end

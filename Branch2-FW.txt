@@ -1,0 +1,236 @@
+!
+hostname Branch2-FW
+domain-name handsometao.win
+enable password $sha512$5000$RPEicPJLSubRwxti1yzyvQ==$5xQ3lnudMxMKGZuCnU3oAw== pbkdf2
+xlate per-session deny tcp any4 any4
+xlate per-session deny tcp any4 any6
+xlate per-session deny tcp any6 any4
+xlate per-session deny tcp any6 any6
+xlate per-session deny udp any4 any4 eq domain
+xlate per-session deny udp any4 any6 eq domain
+xlate per-session deny udp any6 any4 eq domain
+xlate per-session deny udp any6 any6 eq domain
+names
+
+!
+interface GigabitEthernet1/1
+ nameif INSIDE
+ security-level 100
+ ip address 10.0.1.1 255.255.255.252
+ ospf hello-interval 2
+ ospf dead-interval 4
+!
+interface GigabitEthernet1/2
+ nameif INSIDE2
+ security-level 100
+ ip address 10.0.1.5 255.255.255.252
+ ospf cost 100
+ ospf hello-interval 2
+ ospf dead-interval 4
+!
+interface GigabitEthernet1/3
+ nameif OUTSIDE
+ security-level 0
+ ip address dhcp
+!
+interface GigabitEthernet1/4
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/5
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/6
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/7
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/8
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management1/1
+ management-only
+ nameif management
+ security-level 0
+ ip address 1.1.1.2 255.255.255.0
+!
+ftp mode passive
+dns server-group DefaultDNS
+ domain-name handsometao.win
+object network LOCAL
+ subnet 192.168.200.0 255.255.255.0
+object network LOCAL-BACKUP
+ subnet 192.168.200.0 255.255.255.0
+object network OFFICE
+ subnet 192.168.2.0 255.255.255.0
+object network OFFICE-BACKUP
+ subnet 192.168.2.0 255.255.255.0
+object network REMOTE
+ subnet 192.168.100.0 255.255.255.0
+object network REMOTE-OFFICE
+ subnet 192.168.1.0 255.255.255.0
+access-list 100 extended permit icmp any any
+access-list 100 extended permit ip any any
+access-list VPN extended permit ip 192.168.200.0 255.255.255.0 192.168.100.0 255.255.255.0
+access-list VPN extended permit ip 192.168.200.0 255.255.255.0 192.168.1.0 255.255.255.0
+access-list VPN extended permit ip 192.168.2.0 255.255.255.0 192.168.100.0 255.255.255.0
+access-list VPN extended permit ip 192.168.2.0 255.255.255.0 192.168.1.0 255.255.255.0
+pager lines 24
+mtu management 1500
+mtu OUTSIDE 1500
+mtu INSIDE 1500
+mtu INSIDE2 1500
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+arp rate-limit 16384
+nat (INSIDE,OUTSIDE) source static LOCAL LOCAL destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static LOCAL LOCAL destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static LOCAL LOCAL destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static LOCAL LOCAL destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static LOCAL-BACKUP LOCAL-BACKUP destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static LOCAL-BACKUP LOCAL-BACKUP destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static LOCAL-BACKUP LOCAL-BACKUP destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static LOCAL-BACKUP LOCAL-BACKUP destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static OFFICE OFFICE destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static OFFICE OFFICE destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static OFFICE-BACKUP OFFICE-BACKUP destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static OFFICE-BACKUP OFFICE-BACKUP destination static REMOTE REMOTE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static OFFICE OFFICE destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static OFFICE OFFICE destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE,OUTSIDE) source static OFFICE-BACKUP OFFICE-BACKUP destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+nat (INSIDE2,OUTSIDE) source static OFFICE-BACKUP OFFICE-BACKUP destination static REMOTE-OFFICE REMOTE-OFFICE no-proxy-arp route-lookup
+!
+object network LOCAL
+ nat (INSIDE,OUTSIDE) dynamic interface
+object network LOCAL-BACKUP
+ nat (INSIDE2,OUTSIDE) dynamic interface
+object network OFFICE
+ nat (INSIDE,OUTSIDE) dynamic interface
+object network OFFICE-BACKUP
+ nat (INSIDE2,OUTSIDE) dynamic interface
+access-group 100 in interface OUTSIDE
+router ospf 1
+ network 10.0.1.0 255.255.255.252 area 0
+ network 10.0.1.4 255.255.255.252 area 0
+ log-adj-changes
+ redistribute static
+ default-information originate
+!
+route OUTSIDE 0.0.0.0 0.0.0.0 10.128.207.1 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+user-identity default-domain LOCAL
+aaa authentication login-history
+no snmp-server location
+no snmp-server contact
+service sw-reset-button
+crypto ipsec ikev1 transform-set test esp-des esp-sha-hmac
+crypto ipsec security-association pmtu-aging infinite
+crypto map ipsec 10 match address VPN
+crypto map ipsec 10 set peer 10.128.207.133
+crypto map ipsec 10 set ikev1 transform-set test
+crypto map ipsec interface OUTSIDE
+crypto ca trustpool policy
+crypto ikev1 enable OUTSIDE
+crypto ikev1 policy 1
+ authentication pre-share
+ encryption des
+ hash sha
+ group 2
+ lifetime 86400
+telnet timeout 5
+ssh stricthostkeycheck
+ssh 192.168.100.0 255.255.255.0 OUTSIDE
+ssh 192.168.200.0 255.255.255.0 INSIDE
+ssh 192.168.200.0 255.255.255.0 INSIDE2
+ssh timeout 5
+ssh key-exchange group dh-group1-sha1
+console timeout 0
+
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+dynamic-access-policy-record DfltAccessPolicy
+username admin password $sha512$5000$4HW5Xx1VG/8ukaSBVV0Mkg==$7U72CWedJ1wkQeoGDTu7KA== pbkdf2
+tunnel-group 10.128.207.133 type ipsec-l2l
+tunnel-group 10.128.207.133 ipsec-attributes
+ ikev1 pre-shared-key *****
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip
+  inspect xdmcp
+  inspect dns preset_dns_map
+policy-map type inspect dns migrated_dns_map_2
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map type inspect dns migrated_dns_map_1
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+!
+service-policy global_policy global
+prompt hostname context
+no call-home reporting anonymous
+call-home
+ profile CiscoTAC-1
+  no active
+  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService
+  destination address email callhome@cisco.com
+  destination transport-method http
+  subscribe-to-alert-group diagnostic
+  subscribe-to-alert-group environment
+  subscribe-to-alert-group inventory periodic monthly
+  subscribe-to-alert-group configuration periodic monthly
+  subscribe-to-alert-group telemetry periodic daily
+Cryptochecksum:4c68078bd1b07adc4450b46b1ae39c84
+: end

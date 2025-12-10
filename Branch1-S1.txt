@@ -1,0 +1,235 @@
+
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Branch1-S1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$6oW5$R9eYQ776HV1Uu9fDyKBQL.
+!
+username admin secret 5 $1$JGXj$ZBTBh4s4wAaSq7A4K30AD0
+no aaa new-model
+system mtu routing 1500
+ip subnet-zero
+no ip domain-lookup
+ip domain-name handsometao.win
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3561261568
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3561261568
+ revocation-check none
+ rsakeypair TP-self-signed-3561261568
+!
+!
+crypto pki certificate chain TP-self-signed-3561261568
+ certificate self-signed 01
+  30820243 308201AC A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33353631 32363135 3638301E 170D3933 30333031 30303031 
+  30375A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 35363132 
+  36313536 3830819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100B2A8 0A573A38 18155D74 000D4575 EF2F046D 975E71EF B6070722 0955AA7C 
+  F5993ABC 57725F83 52CC1745 65B40477 F8A9AB2D D0C5630D 1CED3CF7 6E995E7B 
+  306247DC 69672E60 2E2F26A4 E40B6C8B F1F535C9 6D25EE65 5DD46CB8 692C7765 
+  4067A96F AD988C68 DE161472 ABC6ACE5 D6E5B311 D426576A F7581D6D F361ED75 
+  C1A70203 010001A3 6B306930 0F060355 1D130101 FF040530 030101FF 30160603 
+  551D1104 0F300D82 0B427261 6E636831 2D53312E 301F0603 551D2304 18301680 
+  14352CFF 111BBDB3 CFFD9CD5 C0E9E005 87357285 D1301D06 03551D0E 04160414 
+  352CFF11 1BBDB3CF FD9CD5C0 E9E00587 357285D1 300D0609 2A864886 F70D0101 
+  04050003 81810097 3F8AB075 E769E03C 8A90DC2B FF97E45F D5538FA6 2F7A1DA5 
+  05B09B0E B1B2BCCE 89F943DD 83156AB9 203DA0AA B7839E93 0565A3F2 C69BA76D 
+  72A0B939 83A48344 8452E12D 16C9671B 83A06D76 D24AE234 92167AA7 8381B181 
+  DB8962B3 B677EDFC 29A83C1F 4CDE6F65 612E6DBB 97C027E0 33B6DB89 975A5C07 
+  9DCFF6E1 45BC6B
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/4
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/5
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/6
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet0/7
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/8
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/9
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/10
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/11
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/12
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/13
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/14
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/15
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/16
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/17
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/18
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/19
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/20
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/21
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/22
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/23
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/24
+ switchport access vlan 199
+ shutdown
+!
+interface GigabitEthernet0/1
+ switchport access vlan 199
+ shutdown
+!
+interface GigabitEthernet0/2
+ switchport access vlan 199
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan100
+ ip address 192.168.100.1 255.255.255.0
+!
+ip default-gateway 192.168.100.254
+ip classless
+ip http server
+ip http secure-server
+!
+!
+access-list 99 permit 192.168.100.0 0.0.0.255
+no cdp run
+!
+!
+control-plane
+!
+banner motd 
+************************************************************
+*  WARNING: AUTHORIZED ACCESS ONLY                         *
+*  ------------------------------------------------------  *
+*  This system is the property of Handsometao.Corp .       *
+*  Unauthorized access is prohibited.                      *
+*                                                          *
+*  All activities on this device are monitored and logged. *
+*  Disconnect immediately if you are not an authorized     *
+*  user.                                                   *
+************************************************************
+
+!
+line con 0
+ password 7 0822455D0A1625464058
+ login
+line vty 0 4
+ access-class 99 in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class 99 in
+ login local
+ transport input ssh
+!
+end

@@ -1,0 +1,197 @@
+
+!
+! Last configuration change at 20:36:56 UTC Fri Mar 19 1993 by admin
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Branch2-S2
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$mmDj$Y0J/HalZ0ZjWDMnn/Blro.
+!
+username admin secret 5 $1$f6X5$fRtSM.ILgj6WEtO8dWnRc/
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+ip domain-name handsometao.win
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/1
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/2
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/3
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/4
+ switchport trunk allowed vlan 10,100
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode desirable
+!
+interface FastEthernet0/5
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet0/6
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/7
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/8
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/9
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/10
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/11
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/12
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/13
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/14
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/15
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/16
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/17
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/18
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/19
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/20
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/21
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/22
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/23
+ switchport access vlan 199
+ shutdown
+!
+interface FastEthernet0/24
+ switchport access vlan 199
+ shutdown
+!
+interface GigabitEthernet0/1
+ switchport access vlan 199
+ shutdown
+!
+interface GigabitEthernet0/2
+ switchport access vlan 199
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan100
+ ip address 192.168.200.2 255.255.255.0
+!
+ip default-gateway 192.168.200.254
+ip http server
+ip http secure-server
+access-list 99 permit 192.168.200.0 0.0.0.255
+no cdp run
+!
+banner motd 
+************************************************************
+*  WARNING: AUTHORIZED ACCESS ONLY                         *
+*  ------------------------------------------------------  *
+*  This system is the property of Handsometao.Corp .       *
+*  Unauthorized access is prohibited.                      *
+*                                                          *
+*  All activities on this device are monitored and logged. *
+*  Disconnect immediately if you are not an authorized     *
+*  user.                                                   *
+************************************************************
+
+!
+line con 0
+ password 7 070C285F4D0639544541
+ login
+line vty 0 4
+ access-class 99 in
+ login local
+ transport input ssh
+line vty 5 15
+ access-class 99 in
+ login local
+ transport input ssh
+!
+end
