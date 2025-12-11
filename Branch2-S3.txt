@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 20:52:09 UTC Thu Mar 18 1993
+! Last configuration change at 19:41:10 UTC Sun Mar 21 1993 by admin
 !
 version 15.0
 no service pad
@@ -22,6 +22,7 @@ system mtu routing 1500
 !
 no ip domain-lookup
 ip domain-name handsometao.win
+login block-for 120 attempts 3 within 60
 !
 !
 !
@@ -31,6 +32,7 @@ ip domain-name handsometao.win
 !
 !
 spanning-tree mode pvst
+spanning-tree portfast bpduguard default
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
@@ -154,8 +156,9 @@ interface Vlan100
  ip address 192.168.200.3 255.255.255.0
 !
 ip default-gateway 192.168.200.254
-ip http server
-ip http secure-server
+no ip http server
+no ip http secure-server
+!
 access-list 99 permit 192.168.200.0 0.0.0.255
 no cdp run
 !
@@ -173,14 +176,17 @@ banner motd 
 
 !
 line con 0
+ exec-timeout 5 0
  password 7 070C285F4D0639544541
  login
 line vty 0 4
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 line vty 5 15
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 !

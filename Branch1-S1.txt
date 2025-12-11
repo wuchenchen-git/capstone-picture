@@ -21,6 +21,7 @@ no ip domain-lookup
 ip domain-name handsometao.win
 !
 !
+login block-for 120 attempts 3 within 60
 !
 !
 crypto pki trustpoint TP-self-signed-3561261568
@@ -58,6 +59,7 @@ crypto pki certificate chain TP-self-signed-3561261568
 !
 !
 spanning-tree mode pvst
+spanning-tree portfast bpduguard default
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
@@ -197,8 +199,9 @@ interface Vlan100
 !
 ip default-gateway 192.168.100.254
 ip classless
-ip http server
-ip http secure-server
+no ip http server
+no ip http secure-server
+!
 !
 !
 access-list 99 permit 192.168.100.0 0.0.0.255
@@ -221,14 +224,17 @@ banner motd 
 
 !
 line con 0
+ exec-timeout 5 0
  password 7 0822455D0A1625464058
  login
 line vty 0 4
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 line vty 5 15
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 !
