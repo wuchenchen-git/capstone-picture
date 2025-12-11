@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 20:28:05 UTC Sat Mar 27 1993 by admin
+! Last configuration change at 00:43:48 UTC Mon Mar 1 1993
 !
 version 15.0
 no service pad
@@ -20,6 +20,7 @@ no aaa new-model
 system mtu routing 1500
 !
 !
+ip dhcp snooping vlan 10,100
 no ip domain-lookup
 ip domain-name handsometao.win
 login block-for 120 attempts 3 within 60
@@ -32,6 +33,7 @@ login block-for 120 attempts 3 within 60
 !
 !
 spanning-tree mode pvst
+spanning-tree portfast default
 spanning-tree portfast bpduguard default
 spanning-tree extend system-id
 !
@@ -47,32 +49,42 @@ interface Port-channel1
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/1
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/2
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
  channel-group 1 mode desirable
+ ip dhcp snooping trust
 !
 interface FastEthernet0/3
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/4
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
  channel-group 1 mode desirable
+ ip dhcp snooping trust
 !
 interface FastEthernet0/5
- switchport access vlan 199
- shutdown
+ switchport access vlan 100
+ switchport mode access
 !
 interface FastEthernet0/6
  switchport access vlan 199

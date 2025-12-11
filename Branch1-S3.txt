@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 20:07:53 UTC Sun Mar 7 1993 by admin
+! Last configuration change at 01:07:18 UTC Mon Mar 1 1993 by admin
 !
 version 15.0
 no service pad
@@ -20,6 +20,8 @@ no aaa new-model
 system mtu routing 1500
 !
 !
+ip dhcp snooping vlan 10,100
+ip dhcp snooping
 no ip domain-lookup
 ip domain-name handsometao.win
 login block-for 120 attempts 3 within 60
@@ -59,6 +61,7 @@ crypto pki certificate chain TP-self-signed-1369329536
 !
 !
 spanning-tree mode pvst
+spanning-tree portfast default
 spanning-tree portfast bpduguard default
 spanning-tree extend system-id
 !
@@ -74,15 +77,32 @@ interface FastEthernet0/1
  switchport trunk allowed vlan 100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/2
  switchport trunk allowed vlan 100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/3
  switchport access vlan 100
  switchport mode access
+ switchport nonegotiate
+ switchport port-security maximum 10
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0090.27e0.04d3
+ switchport port-security mac-address sticky bc24.1125.63ee
+ switchport port-security mac-address sticky bc24.114e.ba52
+ switchport port-security mac-address sticky bc24.1185.d0a6
+ switchport port-security mac-address sticky bc24.119a.5897
+ switchport port-security mac-address sticky bc24.11f4.c0c8
+ switchport port-security
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/4
  switchport access vlan 199

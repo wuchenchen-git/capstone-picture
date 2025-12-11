@@ -21,6 +21,8 @@ no ip domain-lookup
 ip domain-name handsometao.win
 !
 !
+ip dhcp snooping vlan 10,100
+ip dhcp snooping
 login block-for 120 attempts 3 within 60
 !
 !
@@ -59,6 +61,7 @@ crypto pki certificate chain TP-self-signed-3561261568
 !
 !
 spanning-tree mode pvst
+spanning-tree portfast default
 spanning-tree portfast bpduguard default
 spanning-tree extend system-id
 !
@@ -73,42 +76,64 @@ interface Port-channel1
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/1
  switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/2
  switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
  channel-group 1 mode desirable
+ ip dhcp snooping trust
 !
 interface FastEthernet0/3
  switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/4
  switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
+ ip dhcp snooping trust
 !
 interface FastEthernet0/5
  switchport trunk encapsulation dot1q
  switchport trunk allowed vlan 10,100
  switchport mode trunk
  switchport nonegotiate
+ ip arp inspection trust
  channel-group 1 mode desirable
+ ip dhcp snooping trust
 !
 interface FastEthernet0/6
  switchport access vlan 10
  switchport mode access
+ switchport nonegotiate
+ switchport port-security maximum 20
+ switchport port-security
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 40ed.009f.a455
+ switchport port-security mac-address sticky 8cb8.7e62.8338
+ ip arp inspection trust
+ ip dhcp snooping limit rate 20
+ ip dhcp snooping trust
 !
 interface FastEthernet0/7
  switchport access vlan 199
