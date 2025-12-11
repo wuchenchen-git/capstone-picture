@@ -1,5 +1,5 @@
 !
-! Last configuration change at 10:59:52 UTC Mon Dec 8 2025 by admin
+! Last configuration change at 09:57:42 UTC Thu Dec 11 2025 by admin
 !
 version 15.4
 service timestamps debug datetime msec
@@ -137,6 +137,7 @@ no ip http secure-server
 !
 !
 !
+!
 access-list 99 permit 192.168.100.0 0.0.0.255
 !
 control-plane
@@ -177,6 +178,7 @@ banner motd ^C
 ^C
 !
 line con 0
+ exec-timeout 5 0
  password 7 110A1016141D2B5D5679
  login
 line aux 0
@@ -188,10 +190,12 @@ line 2
  stopbits 1
 line vty 0 4
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 line vty 5 15
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 !

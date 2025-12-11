@@ -1,6 +1,5 @@
-
 !
-! Last configuration change at 16:25:07 UTC Mon Dec 8 2025 by admin
+! Last configuration change at 15:19:34 UTC Thu Dec 11 2025 by admin
 !
 version 15.4
 service timestamps debug datetime msec
@@ -35,6 +34,7 @@ memory-size iomem 10
 no ip domain lookup
 ip domain name handsometao.win
 ip cef
+login block-for 120 attempts 3 within 60
 no ipv6 cef
 !
 multilink bundle-name authenticated
@@ -71,7 +71,7 @@ redundancy
 no cdp run
 !
 ip ssh version 2
-! 
+!
 !
 !
 !
@@ -140,6 +140,7 @@ no ip http secure-server
 !
 !
 !
+!
 access-list 99 permit 192.168.200.0 0.0.0.255
 !
 control-plane
@@ -166,7 +167,7 @@ gatekeeper
  shutdown
 !
 !
-banner motd 
+banner motd ^C
 ************************************************************
 *  WARNING: AUTHORIZED ACCESS ONLY                         *
 *  ------------------------------------------------------  *
@@ -177,9 +178,10 @@ banner motd 
 *  Disconnect immediately if you are not an authorized     *
 *  user.                                                   *
 ************************************************************
-
+^C
 !
 line con 0
+ exec-timeout 5 0
  password 7 060506324F4129485744
  login
 line aux 0
@@ -191,10 +193,12 @@ line 2
  stopbits 1
 line vty 0 4
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 line vty 5 15
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 !

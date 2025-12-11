@@ -1,5 +1,5 @@
 !
-! Last configuration change at 16:47:20 UTC Mon Dec 8 2025 by admin
+! Last configuration change at 15:41:36 UTC Thu Dec 11 2025 by admin
 !
 version 16.6
 service timestamps debug datetime msec
@@ -32,6 +32,7 @@ ip domain name handsometao.win
 !
 !
 !
+login block-for 120 attempts 3 within 60
 !
 !
 !
@@ -163,6 +164,7 @@ ip tftp source-interface GigabitEthernet0
 !
 ip ssh version 2
 !
+!
 access-list 99 permit 192.168.200.0 0.0.0.255
 !
 !
@@ -208,6 +210,7 @@ banner motd ^C
 ^C
 !
 line con 0
+ exec-timeout 5 0
  password 7 110A1016141D2B5D5679
  login
  transport input none
@@ -216,10 +219,12 @@ line aux 0
  stopbits 1
 line vty 0 4
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 line vty 5 15
  access-class 99 in
+ exec-timeout 5 0
  login local
  transport input ssh
 !
