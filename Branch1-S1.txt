@@ -22,6 +22,7 @@ ip domain-name handsometao.win
 !
 !
 ip dhcp snooping vlan 10,100
+no ip dhcp snooping information option
 ip dhcp snooping
 login block-for 120 attempts 3 within 60
 !
@@ -129,11 +130,13 @@ interface FastEthernet0/6
  switchport port-security
  switchport port-security violation restrict
  switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 128e.1e86.8804
  switchport port-security mac-address sticky 40ed.009f.a455
+ switchport port-security mac-address sticky 46bb.a1e2.78d6
  switchport port-security mac-address sticky 8cb8.7e62.8338
+ switchport port-security mac-address sticky 985f.4106.2e8f
  ip arp inspection trust
  ip dhcp snooping limit rate 20
- ip dhcp snooping trust
 !
 interface FastEthernet0/7
  switchport access vlan 199

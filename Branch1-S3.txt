@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 01:07:18 UTC Mon Mar 1 1993 by admin
+! Last configuration change at 18:56:42 UTC Mon Mar 1 1993 by admin
 !
 version 15.0
 no service pad
@@ -21,6 +21,7 @@ system mtu routing 1500
 !
 !
 ip dhcp snooping vlan 10,100
+no ip dhcp snooping information option
 ip dhcp snooping
 no ip domain-lookup
 ip domain-name handsometao.win
